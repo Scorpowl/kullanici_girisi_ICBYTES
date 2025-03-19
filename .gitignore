@@ -3,3 +3,7 @@ bin/
 obj/
 *.user
 *.suo
+*.tlog
+*.lastbuildstate
+*.pdb
+*.ilk
