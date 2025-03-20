@@ -5,6 +5,14 @@
 int NAME, EMAIL, PHONE, REASON, PHOTO_FRAME;
 ICBYTES photo;
 
+void CapturePhoto() {
+    ICDEVICE cam;
+    CreateDXCam(cam, 0);
+    CaptureImage(cam, photo);
+    DisplayImage(PHOTO_FRAME, photo);
+    CloseDevice(cam);
+}
+
 void ICGUI_main() {
     ICG_Static(10, 10, 100, 25, "Name:");
     NAME = ICG_SLEditSunken(120, 10, 200, 25, "");
@@ -22,4 +30,4 @@ void ICGUI_main() {
     ICG_Button(10, 170, 150, 30, "Capture Photo", CapturePhoto);
     ICG_Button(10, 220, 150, 30, "Register", RegisterUser);
     ICG_Button(10, 270, 150, 30, "Show Users", ShowUsers);
-}
+} 
