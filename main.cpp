@@ -1,68 +1,34 @@
 #include "icb_gui.h"
-#include "icbytes.h"
-//#include "icbimage.h"
 
-int NAME, EMAIL, PHONE, REASON, PHOTO_FRAME;
-ICBYTES photo;
+// Form bileþenlerinin tanýmlarý
+int SLE_Ad, SLE_Email, LB_KayitSebebi, MLE_Aciklama, BTN_Kaydet, MLE_KayitListesi;
 
 void ICGUI_Create() {
-    ICG_MWSize(600, 400);
-    ICG_MWTitle("Customer Registration");
+    ICG_MWSize(500, 400);
+    ICG_MWTitle("Kullanýcý Kayýt Formu");
 }
-
-void CapturePhoto() {
-    ICDEVICE cam;
-    CreateDXCam(cam, 0);
-    CaptureImage(cam, photo);
-    DisplayImage(PHOTO_FRAME, photo);
-    CloseDevice(cam);
-}
-
-void RegisterUser() {
-    ICBYTES name, email, phone, reason;
-    GetText(NAME, name);
-    GetText(EMAIL, email);
-    GetText(PHONE, phone);
-    GetText(REASON, reason);
-
-    KeyMap userData;
-    SetKey(userData, "Name", name);
-    SetKey(userData, "Email", email);
-    SetKey(userData, "Phone", phone);
-    SetKey(userData, "Reason", reason);
-    SetKey(userData, "Photo", photo);
-
-    SaveKeyMap("users.kdb", userData, APPEND_MODE);
-    ICG_printf(NAME, "User Registered Successfully!");
-}
-
-void ShowUsers() {
-    KeyMap userData;
-    LoadKeyMap("users.kdb", userData);
-
-    ICBYTES name, email;
-    for (int i = 0; i < 3; i++) {
-        GetKey(userData, i, "Name", name);
-        GetKey(userData, i, "Email", email);
-        ICG_printf(NAME, name + " - " + email);
-    }
+void KaydetFonksiyonu() {
+    
 }
 
 void ICGUI_main() {
-    ICG_Static(10, 10, 100, 25, "Name:");
-    NAME = ICG_SLEditSunken(120, 10, 200, 25, "");
+    ICG_Static(20, 20, 80, 25, "Ad & Soyad:");
+    SLE_Ad = ICG_SLEditBorder(120, 20, 200, 25, "");
 
-    ICG_Static(10, 50, 100, 25, "Email:");
-    EMAIL = ICG_SLEditSunken(120, 50, 200, 25, "");
+    ICG_Static(20, 60, 80, 25, "E-posta:");
+    SLE_Email = ICG_SLEditBorder(120, 60, 200, 25, "");
 
-    ICG_Static(10, 90, 100, 25, "Phone:");
-    PHONE = ICG_SLEditSunken(120, 90, 200, 25, "");
+   /* ICG_Static(20, 100, 100, 25, "Kayýt Sebebi:");
+    LB_KayitSebebi = ICG_ListBox(120, 100, 200, 100, ListboxSecimFonk);
+    ICG_AddToList(LB_KayitSebebi, "Kütüphane");
+    ICG_AddToList(LB_KayitSebebi, "Üniversite");
+    ICG_AddToList(LB_KayitSebebi, "Hastane");*/
 
-    ICG_Static(10, 130, 100, 25, "Reason:");
-    REASON = ICG_SLEditSunken(120, 130, 200, 25, "");
+    ICG_Static(20, 210, 100, 25, "Ek Açýklama:");
+    MLE_Aciklama = ICG_MLEditSunken(120, 210, 200, 60, "", SCROLLBAR_V);
 
-    PHOTO_FRAME = ICG_FrameMedium(350, 10, 200, 200);
-    ICG_Button(10, 170, 150, 30, "Capture Photo", CapturePhoto);
-    ICG_Button(10, 220, 150, 30, "Register", RegisterUser);
-    ICG_Button(10, 270, 150, 30, "Show Users", ShowUsers);
-} 
+    BTN_Kaydet = ICG_Button(120, 280, 100, 30, "Kaydet", KaydetFonksiyonu);
+
+    ICG_Static(20, 320, 100, 25, "Kayýtlý Kullanýcýlar:");
+    MLE_KayitListesi = ICG_MLEditSunken(120, 320, 350, 60, "", SCROLLBAR_V);
+}
