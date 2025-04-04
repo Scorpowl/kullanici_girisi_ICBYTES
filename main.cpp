@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <io.h>
 
-
 int adKutusu, soyadKutusu, telKutusu, emailKutusu, frmFoto;
 ICBYTES resim;
 
@@ -33,9 +32,7 @@ void Kaydet() {
     // Manuel bir foto ismi ver (gerekirse zamanla deðiþtir)
     resimYolu = "assets/foto.icb";
 
-    if (_access("assets", 0) == -1) {
-        _mkdir("assets");
-    }
+    
 
     // Fotoðrafý kaydet
     ICDEVICE foto;
@@ -50,7 +47,6 @@ void Kaydet() {
         MessageBoxA(NULL, "Fotoðraf dosyasý oluþturulamadý!", "Hata", MB_OK | MB_ICONERROR);
         return;
     }
-
 
     // Veritabaný dosyasýna kayýt ekle
     ICDEVICE veriDosyasi;
@@ -68,12 +64,45 @@ void Kaydet() {
     }
 }
 
-
-
 void FotoYukle() {
     ICBYTES yol;
     ReadImage(OpenFileMenu(yol, "JPEG\0*.JPG\0BMP\0*.BMP\0"), resim);
     DisplayImage(frmFoto, resim);
+}
+
+void ListePenceresi() {
+    
+    // Liste alaný
+    int MLE = ICG_MLEdit(20, 20, 550, 320, "Kayýtlar", SCROLLBAR_V);
+    ICG_SetWindowText(MLE, "");
+
+    // Dosyayý oku
+    ICDEVICE dosya;
+    if (!CreateFileReader(dosya, "veri.bin")) {
+        ICG_printf(MLE, "veri.bin açýlamadý!\n");
+        return;
+    }
+
+    ICBYTES ad, soyad, tel, email, foto;
+    int sayac = 1;
+
+    while (ReadIntoMatrix(dosya, ad)) {
+        ReadIntoMatrix(dosya, soyad);
+        ReadIntoMatrix(dosya, tel);
+        ReadIntoMatrix(dosya, email);
+        ReadIntoMatrix(dosya, foto);
+
+        ICG_printf(MLE, "Kayýt #%d:\n", sayac++);
+        Print(MLE, ad);
+        Print(MLE, soyad);
+        Print(MLE, tel);
+        Print(MLE, email);
+        Print(MLE, foto);
+        ICG_printf(MLE, "-----------------------------\n");
+    }
+
+    CloseDevice(dosya);
+
 }
 
 void Listele() {
@@ -108,7 +137,9 @@ void Listele() {
 
 
 void ICGUI_Create() {
-    _mkdir("assets"); // klasör yoksa oluþturur, varsa hiçbir þey yapmaz
+    if (_access("assets", 0) == -1) {
+        _mkdir("assets");
+    }
     ICG_MWSize(500, 450);
     ICG_MWTitle("Müþteri Kayýt Sistemi");
 }
@@ -124,5 +155,7 @@ void ICGUI_main() {
 
     ICG_Button(20, 300, 150, 40, "Kaydet", Kaydet);
     ICG_Button(200, 300, 150, 40, "Listele", Listele);
+    ICG_Button(200, 350, 150, 40, "Kayýtlarý Göster", ListePenceresi);
+
 
 }
