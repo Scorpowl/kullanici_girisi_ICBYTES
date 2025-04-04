@@ -6,7 +6,7 @@
 #include "icbytes.h"
 #include <string>
 #include <algorithm>
-
+#include <io.h>
 
 
 int adKutusu, soyadKutusu, telKutusu, emailKutusu, frmFoto;
@@ -33,22 +33,22 @@ void Kaydet() {
     // Manuel bir foto ismi ver (gerekirse zamanla deðiþtir)
     resimYolu = "assets/foto.icb";
 
+    if (_access("assets", 0) == -1) {
+        _mkdir("assets");
+    }
+
     // Fotoðrafý kaydet
     ICDEVICE foto;
     if (CreateFileDevice(foto, "assets/foto.icb")) {
-        long long yazilanAdres = WriteICBYTES(foto, resim, 0);
-
-        if (yazilanAdres <= 0) {
-            MessageBoxA(NULL, "Resim yazýlamadý!", "HATA", MB_OK | MB_ICONERROR);
-        }
-        else {
-            MessageBoxA(NULL, "Resim baþarýyla yazýldý.", "Bilgi", MB_OK);
-        }
-
+        long long yazilan = WriteICBYTES(foto, resim, 0);
         CloseDevice(foto);
+
+        if (yazilan <= 0)
+            MessageBoxA(NULL, "Fotoðraf yazýlamadý!", "Hata", MB_OK | MB_ICONERROR);
     }
     else {
-        MessageBoxA(NULL, "Fotoðraf dosyasý açýlamadý!", "Hata", MB_OK | MB_ICONERROR);
+        MessageBoxA(NULL, "Fotoðraf dosyasý oluþturulamadý!", "Hata", MB_OK | MB_ICONERROR);
+        return;
     }
 
 
@@ -84,7 +84,8 @@ void Listele() {
     }
 
     ICBYTES ad, soyad, tel, email, foto;
-    int MLE = ICG_MLEdit(20, 20, 400, 300, "Kayýtlar", SCROLLBAR_V);
+    int MLE = ICG_MLEdit(20, 20, 440, 300, "Kayýtlar", SCROLLBAR_V);
+    ICG_SetWindowText(MLE, "");
     int sayac = 1;
 
     while (ReadIntoMatrix(dosya, ad)) {
@@ -99,7 +100,7 @@ void Listele() {
         Print(MLE, tel);
         Print(MLE, email);
         Print(MLE, foto);
-        ICG_printf(MLE, "------------------------\n");
+        ICG_printf(MLE, "-----------------------------\n");
     }
 
     CloseDevice(dosya);
