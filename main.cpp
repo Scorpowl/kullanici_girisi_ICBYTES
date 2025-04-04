@@ -1,3 +1,4 @@
+#include <direct.h>
 #include "icb_gui.h"
 #include "ic_media.h"
 #include <fstream>
@@ -20,45 +21,53 @@ struct Musteri {
 };
 
 void Kaydet() {
+    // Girdi verileri ICBYTES olarak tanýmlanýr
     ICBYTES ad, soyad, telefon, email, resimYolu;
 
-    // Kullanýcýdan alýnan veriler
+    // GUI’den veri al
     GetText(adKutusu, ad);
     GetText(soyadKutusu, soyad);
     GetText(telKutusu, telefon);
     GetText(emailKutusu, email);
 
-    // Benzersiz resim dosyasý ismi oluþtur
-    time_t t = time(0);
-    char yol[100];
-    sprintf(yol, "assets/resim_%lld.icb", (long long)t);
-    resimYolu = yol;
+    // Manuel bir foto ismi ver (gerekirse zamanla deðiþtir)
+    resimYolu = "assets/foto.icb";
 
-    // Resmi diske kaydet
-    ICDEVICE imgFile;
-    if (CreateFileDevice(imgFile, yol)) {
-        WriteICBYTES(imgFile, resim, 0);  // resmi .icb olarak kaydet
-        CloseDevice(imgFile);
-    } else {
-        MessageBoxA(NULL, "Resim kaydedilemedi", "Hata", MB_OK | MB_ICONERROR);
-        return;
+    // Fotoðrafý kaydet
+    ICDEVICE foto;
+    if (CreateFileDevice(foto, "assets/foto.icb")) {
+        long long yazilanAdres = WriteICBYTES(foto, resim, 0);
+
+        if (yazilanAdres <= 0) {
+            MessageBoxA(NULL, "Resim yazýlamadý!", "HATA", MB_OK | MB_ICONERROR);
+        }
+        else {
+            MessageBoxA(NULL, "Resim baþarýyla yazýldý.", "Bilgi", MB_OK);
+        }
+
+        CloseDevice(foto);
+    }
+    else {
+        MessageBoxA(NULL, "Fotoðraf dosyasý açýlamadý!", "Hata", MB_OK | MB_ICONERROR);
     }
 
-    // Veritabanýna ekle
-    ICDEVICE veriDosya;
-    if (CreateFileDevice(veriDosya, "veri.bin")) {
-        AppendMatrixToFile(veriDosya, ad);
-        AppendMatrixToFile(veriDosya, soyad);
-        AppendMatrixToFile(veriDosya, telefon);
-        AppendMatrixToFile(veriDosya, email);
-        AppendMatrixToFile(veriDosya, resimYolu);
-        CloseDevice(veriDosya);
 
+    // Veritabaný dosyasýna kayýt ekle
+    ICDEVICE veriDosyasi;
+    if (CreateFileDevice(veriDosyasi, "veri.bin")) {
+        AppendMatrixToFile(veriDosyasi, ad);
+        AppendMatrixToFile(veriDosyasi, soyad);
+        AppendMatrixToFile(veriDosyasi, telefon);
+        AppendMatrixToFile(veriDosyasi, email);
+        AppendMatrixToFile(veriDosyasi, resimYolu);
+        CloseDevice(veriDosyasi);
         MessageBoxA(NULL, "Kayýt baþarýyla eklendi", "Bilgi", MB_OK);
-    } else {
-        MessageBoxA(NULL, "Veritabaný dosyasý açýlamadý!", "Hata", MB_OK | MB_ICONERROR);
+    }
+    else {
+        MessageBoxA(NULL, "Veritabaný dosyasý oluþturulamadý", "Hata", MB_OK | MB_ICONERROR);
     }
 }
+
 
 
 void FotoYukle() {
@@ -98,6 +107,7 @@ void Listele() {
 
 
 void ICGUI_Create() {
+    _mkdir("assets"); // klasör yoksa oluþturur, varsa hiçbir þey yapmaz
     ICG_MWSize(500, 450);
     ICG_MWTitle("Müþteri Kayýt Sistemi");
 }
