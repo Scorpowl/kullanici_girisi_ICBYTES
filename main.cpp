@@ -1,34 +1,33 @@
 #include "icb_gui.h"
+#include "ic_media.h"
 
-// Form bileþenlerinin tanýmlarý
-int SLE_Ad, SLE_Email, LB_KayitSebebi, MLE_Aciklama, BTN_Kaydet, MLE_KayitListesi;
+int adKutusu, soyadKutusu, telKutusu, emailKutusu, frmFoto;
+ICBYTES resim;
+
+void FotoYukle() {
+    ICBYTES yol;
+    ReadImage(OpenFileMenu(yol, "JPEG\0*.JPG\0BMP\0*.BMP\0"), resim);
+    DisplayImage(frmFoto, resim);
+}
+
+void Kaydet() {
+    // Buraya kayýt verilerini toplayýp veritabanýna yazacaðýz
+    // Örn: GetText(adKutusu, veri.ad) gibi
+}
 
 void ICGUI_Create() {
-    ICG_MWSize(500, 400);
-    ICG_MWTitle("Kullanýcý Kayýt Formu");
-}
-void KaydetFonksiyonu() {
-    
+    ICG_MWSize(500, 450);
+    ICG_MWTitle("Müþteri Kayýt Sistemi");
 }
 
 void ICGUI_main() {
-    ICG_Static(20, 20, 80, 25, "Ad & Soyad:");
-    SLE_Ad = ICG_SLEditBorder(120, 20, 200, 25, "");
+    adKutusu = ICG_SLEditSunken(20, 20, 300, 25, "Ad");
+    soyadKutusu = ICG_SLEditSunken(20, 60, 300, 25, "Soyad");
+    telKutusu = ICG_SLEditSunken(20, 100, 300, 25, "Telefon");
+    emailKutusu = ICG_SLEditSunken(20, 140, 300, 25, "E-posta");
 
-    ICG_Static(20, 60, 80, 25, "E-posta:");
-    SLE_Email = ICG_SLEditBorder(120, 60, 200, 25, "");
+    ICG_Button(20, 180, 150, 30, "Fotoðraf Yükle", FotoYukle);
+    frmFoto = ICG_FrameThick(200, 180, 100, 100);
 
-   /* ICG_Static(20, 100, 100, 25, "Kayýt Sebebi:");
-    LB_KayitSebebi = ICG_ListBox(120, 100, 200, 100, ListboxSecimFonk);
-    ICG_AddToList(LB_KayitSebebi, "Kütüphane");
-    ICG_AddToList(LB_KayitSebebi, "Üniversite");
-    ICG_AddToList(LB_KayitSebebi, "Hastane");*/
-
-    ICG_Static(20, 210, 100, 25, "Ek Açýklama:");
-    MLE_Aciklama = ICG_MLEditSunken(120, 210, 200, 60, "", SCROLLBAR_V);
-
-    BTN_Kaydet = ICG_Button(120, 280, 100, 30, "Kaydet", KaydetFonksiyonu);
-
-    ICG_Static(20, 320, 100, 25, "Kayýtlý Kullanýcýlar:");
-    MLE_KayitListesi = ICG_MLEditSunken(120, 320, 350, 60, "", SCROLLBAR_V);
+    ICG_Button(20, 300, 150, 40, "Kaydet", Kaydet);
 }

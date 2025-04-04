@@ -1,4 +1,6 @@
 ﻿  main.cpp
-ICBYTESx64Debug.lib(icb_gui.obj) : warning LNK4099: PDB '', 'ICBYTESx64Debug.lib(icb_gui.obj)' ile veya '' üzerinde bulunamadı; nesne, hata ayıklama bilgileri yokmuş gibi bağlanıyor
 ICBYTESx64Debug.lib(icbytes.obj) : warning LNK4099: PDB '', 'ICBYTESx64Debug.lib(icbytes.obj)' ile veya '' üzerinde bulunamadı; nesne, hata ayıklama bilgileri yokmuş gibi bağlanıyor
-  kullanici_girisi_ICBYTES.vcxproj -> C:\Users\furka\Desktop\Kullanıcı girişi uygulaması\kullanici_girisi_ICBYTES\x64\Debug\kullanici_girisi_ICBYTES.exe
+ICBYTESx64Debug.lib(ic_media.obj) : warning LNK4099: PDB '', 'ICBYTESx64Debug.lib(ic_media.obj)' ile veya '' üzerinde bulunamadı; nesne, hata ayıklama bilgileri yokmuş gibi bağlanıyor
+ICBYTESx64Debug.lib(icb_gui.obj) : warning LNK4099: PDB '', 'ICBYTESx64Debug.lib(icb_gui.obj)' ile veya '' üzerinde bulunamadı; nesne, hata ayıklama bilgileri yokmuş gibi bağlanıyor
+ICBYTESx64Debug.lib(jpgd.obj) : warning LNK4099: PDB '', 'ICBYTESx64Debug.lib(jpgd.obj)' ile veya '' üzerinde bulunamadı; nesne, hata ayıklama bilgileri yokmuş gibi bağlanıyor
+  kullanici_girisi_ICBYTES.vcxproj -> D:\Kullanıcı girişi uygulaması\kullanici_girisi_ICBYTES\x64\Debug\kullanici_girisi_ICBYTES.exe
