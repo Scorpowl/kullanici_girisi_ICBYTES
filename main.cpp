@@ -4,6 +4,15 @@
 int adKutusu, soyadKutusu, telKutusu, emailKutusu, frmFoto;
 ICBYTES resim;
 
+struct Musteri {
+    char ad[50];
+    char soyad[50];
+    char telefon[20];
+    char email[50];
+    char resimYolu[100];  // assets klasörüne kayýt edilen resmin yolu
+};
+
+
 void FotoYukle() {
     ICBYTES yol;
     ReadImage(OpenFileMenu(yol, "JPEG\0*.JPG\0BMP\0*.BMP\0"), resim);
