@@ -1,2 +1,3 @@
 ﻿  main.cpp
+D:\Kullanıcı girişi uygulaması\kullanici_girisi_ICBYTES\main.cpp(122,70): warning C4244: '=': '__int64' - 'unsigned int' dönüşümü; veri kaybı olabilir
   kullanici_girisi_ICBYTES.vcxproj -> D:\Kullanıcı girişi uygulaması\kullanici_girisi_ICBYTES\x64\Debug\kullanici_girisi_ICBYTES.exe
